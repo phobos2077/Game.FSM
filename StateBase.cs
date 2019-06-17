@@ -7,9 +7,13 @@ namespace Game.FSM
     /// </summary>
     public abstract class StateBase : StateContext, IState
     {
+        /// <inheritdoc/>
         public abstract void Enter();
+
+        /// <inheritdoc/>
         public abstract void Exit();
 
+        /// <inheritdoc/>
         public override bool TriggerEvent<T>(T stateEvent, bool allowTransition = true)
         {
             bool isHandled = base.TriggerEvent(stateEvent, allowTransition);

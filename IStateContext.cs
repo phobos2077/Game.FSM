@@ -22,8 +22,15 @@ namespace Game.FSM
         /// </summary>
         IState ActiveState { get; }
 
+        /// <summary>
+        /// Next transition to execute.
+        /// </summary>
         TransitionBase NextTransition { set; }
 
+        /// <summary>
+        /// Executes the next transition in this context or any of it's children in the active branch.
+        /// </summary>
+        /// <returns>True if transition was executed.</returns>
         bool ExecuteNextTransition();
 
         /// <summary>
@@ -32,6 +39,13 @@ namespace Game.FSM
         /// <param name="newState"></param>
         void SwitchState(IState newState);
 
+        /// <summary>
+        /// Triggers the event for the active states to handle.
+        /// </summary>
+        /// <param name="stateEvent">Event data.</param>
+        /// <param name="allowTransition">Allow transitions to be executed automatically after event is handled.</param>
+        /// <typeparam name="T">Type of event.</typeparam>
+        /// <returns>True if event was handled by any active state.</returns>
         bool TriggerEvent<T>(T stateEvent, bool allowTransition = true);
     }
 }

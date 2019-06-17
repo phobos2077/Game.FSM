@@ -6,6 +6,10 @@ namespace Game.FSM
     /// <typeparam name="T"></typeparam>
     public interface IStateWithInput<in T> : IState
     {
+        /// <summary>
+        /// Applies transition data argument to a state.
+        /// </summary>
+        /// <param name="arg"></param>
         void SetTransitionData(T arg);
     }
 }

@@ -16,12 +16,10 @@ namespace Game.FSM
         /// <inheritdoc />
         public virtual IState ActiveLeafState => ActiveState?.ActiveLeafState ?? ActiveState;
 
+        /// <inheritdoc />
         public TransitionBase NextTransition { get; set; }
 
-        /// <summary>
-        /// Immediately switch to a given state.
-        /// </summary>
-        /// <param name="newState"></param>
+        /// <inheritdoc />
         public void SwitchState(IState newState)
         {
             if (ActiveState != null)
@@ -46,11 +44,7 @@ namespace Game.FSM
             }
         }
 
-        private void InvokeLeafStateChange(IState state)
-        {
-            OnLeafStateChanged?.Invoke(state);
-        }
-
+        /// <inheritdoc />
         public bool ExecuteNextTransition()
         {
             if (NextTransition != null)
@@ -62,13 +56,34 @@ namespace Game.FSM
             return ActiveState != null && ActiveState.ExecuteNextTransition();
         }
 
+        /// <inheritdoc />
+        public virtual bool TriggerEvent<T>(T stateEvent, bool allowTransition = true)
+        {
+            if (ActiveState != null)
+            {
+                var isHandled = ActiveState.TriggerEvent(stateEvent, false);
+                if (allowTransition && ExecuteNextTransition())
+                {
+                    isHandled = true;
+                }
+                return isHandled;
+            }
+
+            return false;
+        }
+
+        private void InvokeLeafStateChange(IState state)
+        {
+            OnLeafStateChanged?.Invoke(state);
+        }
+
         /// <summary>
         /// Checks that target context belongs to an active branch of a given root context.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="root"></param>
         /// <returns></returns>
-        private static bool IsActiveContext(IStateContext context, IStateContext root)
+        public static bool IsActiveContext(IStateContext context, IStateContext root)
         {
             if (root == context)
             {
@@ -83,28 +98,6 @@ namespace Game.FSM
                 }
 
                 state = state.ActiveState;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Traverse the active state tree branch and handle the event.
-        /// </summary>
-        /// <param name="stateEvent"></param>
-        /// <param name="allowTransition"></param>
-        /// <typeparam name="T">State event type.</typeparam>
-        /// <returns>True if event was handled.</returns>
-        public virtual bool TriggerEvent<T>(T stateEvent, bool allowTransition = true)
-        {
-            if (ActiveState != null)
-            {
-                var isHandled = ActiveState.TriggerEvent(stateEvent, false);
-                if (allowTransition && ExecuteNextTransition())
-                {
-                    isHandled = true;
-                }
-                return isHandled;
             }
 
             return false;

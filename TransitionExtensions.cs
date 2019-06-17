@@ -2,6 +2,9 @@ using System;
 
 namespace Game.FSM
 {
+    /// <summary>
+    /// Extension methods providing fluent interface for transition building.
+    /// </summary>
     public static class TransitionExtensions
     {
         /// <summary>

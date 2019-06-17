@@ -7,8 +7,14 @@ namespace Game.FSM
     /// </summary>
     public interface IState : IStateContext
     {
+        /// <summary>
+        /// Called when context is entering the state.
+        /// </summary>
         void Enter();
 
+        /// <summary>
+        /// Called when context is exiting the state.
+        /// </summary>
         void Exit();
     }
 }

@@ -8,8 +8,14 @@ namespace Game.FSM
     /// </summary>
     public abstract class TransitionBase
     {
+        /// <summary>
+        /// A list of conditions that needs to be met for the Transition to Invoke.
+        /// </summary>
         public List<Func<bool>> Conditions { get; } = new List<Func<bool>>();
 
+        /// <summary>
+        /// Root context for the transition.
+        /// </summary>
         public IStateContext Context { get; }
 
         private readonly List<IState> targetStates = new List<IState>();
@@ -73,6 +79,10 @@ namespace Game.FSM
         }
     }
 
+    /// <summary>
+    /// Transition with a BeforeSwitch action delegate associated with each target state.
+    /// </summary>
+    /// <typeparam name="TStateAction"></typeparam>
     public abstract class TransitionBase<TStateAction> : TransitionBase
     {
         private readonly Dictionary<IState, TStateAction> executeActions = new Dictionary<IState, TStateAction>();
